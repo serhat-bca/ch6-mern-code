@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const { errorHandler, requestLogger } = require("./utils/middleware");
 // Movie model
 const Movie = require("./models/movie");
 
@@ -8,25 +9,6 @@ const Movie = require("./models/movie");
 app.use(cors());
 app.use(express.json());
 app.use(express.static("dist"));
-
-const requestLogger = (req, res, next) => {
-  console.log(`Request Method: ${req.method}`);
-  console.log(`Request URL: ${req.url}`);
-  console.log("Request body:", req.body);
-  console.log("------------");
-  next();
-};
-
-// middleware for error handling
-const errorHandler = (error, req, res, next) => {
-  console.log("error message: ", error.message);
-  if (error.name === "CastError") {
-    return res.status(400).json({ error: "invalid id" });
-  } else if (error.name === "ValidationError") {
-    return res.status(400).json({ error: error.message });
-  }
-  next(error);
-};
 
 // utilize requestLogger middleware
 app.use(requestLogger);
@@ -104,6 +86,5 @@ app.get("/", (req, res) => {
 });
 
 app.use(errorHandler);
-
 
 module.exports = app;
