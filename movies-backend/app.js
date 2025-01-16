@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const { errorHandler, requestLogger } = require("./utils/middleware");
+const logger = require("./utils/logger");
 // routes
 const moviesRouter = require("./routes/movies");
 // Movie model
@@ -17,9 +18,9 @@ const DB_URI = config.dbUri;
 mongoose.set("strictQuery", false);
 mongoose
   .connect(DB_URI)
-  .then(() => console.log("DB Connection Established"))
+  .then(() => logger.log("DB Connection Established"))
   .catch((e) => {
-    console.log("Error connecting the DB: ", e.message);
+    logger.error("Error connecting the DB: ", e.message);
   });
 
 // middleware for parsing body into js object
