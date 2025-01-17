@@ -22,16 +22,12 @@ todosRouter.get("/", async (req, res) => {
   res.json(todos);
 });
 
-todosRouter.get("/:id", async (req, res, next) => {
-  try {
-    const todo = await Todo.findById(req.params.id);
-    if (!todo) {
-      res.status(404).json({ error: "Task not found" });
-    } else {
-      res.json(todo);
-    }
-  } catch (error) {
-    next(error);
+todosRouter.get("/:id", async (req, res) => {
+  const todo = await Todo.findById(req.params.id);
+  if (!todo) {
+    res.status(404).json({ error: "Task not found" });
+  } else {
+    res.json(todo);
   }
 });
 
