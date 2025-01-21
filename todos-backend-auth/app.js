@@ -6,6 +6,7 @@ const { errorHandler, requestLogger } = require("./utils/middleware");
 const logger = require("./utils/logger");
 // routes
 const todosRouter = require("./routes/todos");
+const usersRouter = require("./routes/users");
 // Todo model
 const Todo = require("./models/todo");
 
@@ -32,6 +33,7 @@ app.use(express.static("dist"));
 // utilize requestLogger middleware
 app.use(requestLogger);
 app.use("/api/todos", todosRouter);
+app.use("/api/users", usersRouter);
 
 app.use(errorHandler);
 
