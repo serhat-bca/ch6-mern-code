@@ -9,6 +9,10 @@ const config = require("../utils/config");
 const todoSchema = new mongoose.Schema({
   task: { type: String, required: true, minLength: 2 },
   done: Boolean,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 // configure toJSON method
