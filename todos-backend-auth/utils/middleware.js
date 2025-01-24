@@ -3,7 +3,10 @@ const logger = require("./logger");
 const requestLogger = (req, res, next) => {
   logger.log(`Request Method: ${req.method}`);
   logger.log(`Request URL: ${req.url}`);
-  logger.log("Request body:", req.body);
+  const modifiedBody = req.body.password
+    ? { ...req.body, password: "******" }
+    : req.body;
+  logger.log("Request body:", modifiedBody);
   logger.log("------------");
   next();
 };
