@@ -1,14 +1,21 @@
 const express = require("express");
 const todosRouter = express.Router();
 const Todo = require("../models/todo");
+const User = require("../models/user");
 
 todosRouter.post("/", async (req, res) => {
-  const { task, done } = req.body;
+  const { task, done, userId } = req.body;
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ error: "user not found" });
+  }
   if (!task) {
     return res.status(400).json({ error: "Task is required" });
   } else {
-    const todo = new Todo({ task, done: done || false });
+    const todo = new Todo({ task, done: done || false, user: user._id });
     const savedTodo = await todo.save();
+    user.todos = [...user.todos, savedTodo._id];
+    await user.save();
     res.json(savedTodo);
   }
 });
