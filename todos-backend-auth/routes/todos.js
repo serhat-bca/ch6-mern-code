@@ -49,7 +49,9 @@ todosRouter.delete("/:id", async (req, res) => {
     await user.save();
     return res
       .status(200)
-      .json({ message: `The task [${todo.task}] deleted successfully.` });
+      .json({
+        message: `The task [${removedTodo.task}] deleted successfully.`,
+      });
   }
   // const todo = await Todo.findByIdAndDelete(req.params.id);
   // if (!todo) {
