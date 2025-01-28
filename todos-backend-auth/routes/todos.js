@@ -21,7 +21,7 @@ todosRouter.post("/", async (req, res) => {
 });
 
 todosRouter.get("/", async (req, res) => {
-  const todos = await Todo.find({});
+  const todos = await Todo.find({}).populate("user", { username: 1, name: 1 });
   res.json(todos);
 });
 
@@ -47,11 +47,9 @@ todosRouter.delete("/:id", async (req, res) => {
       (todoId) => todoId.toString() !== req.params.id
     );
     await user.save();
-    return res
-      .status(200)
-      .json({
-        message: `The task [${removedTodo.task}] deleted successfully.`,
-      });
+    return res.status(200).json({
+      message: `The task [${removedTodo.task}] deleted successfully.`,
+    });
   }
   // const todo = await Todo.findByIdAndDelete(req.params.id);
   // if (!todo) {
