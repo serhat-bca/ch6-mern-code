@@ -35,14 +35,30 @@ todosRouter.get("/:id", async (req, res) => {
 });
 
 todosRouter.delete("/:id", async (req, res) => {
-  const todo = await Todo.findByIdAndDelete(req.params.id);
-  if (!todo) {
-    res.status(404).json({ error: "Task not found!" });
+  const todo = await Todo.findById(req.params.id);
+  if (!todo) return res.status(404).json({ error: "task not found" });
+  const user = await User.findById(req.body.userId);
+  if (!user) return res.status(404).json({ error: "user not found" });
+  if (user._id.toString() !== todo.user.toString()) {
+    return res.status(401).json({ error: "Unauthorized Access" });
   } else {
-    res
+    const removedTodo = await Todo.findByIdAndDelete(req.params.id);
+    user.todos = user.todos.filter(
+      (todoId) => todoId.toString() !== req.params.id
+    );
+    await user.save();
+    return res
       .status(200)
       .json({ message: `The task [${todo.task}] deleted successfully.` });
   }
+  // const todo = await Todo.findByIdAndDelete(req.params.id);
+  // if (!todo) {
+  //   res.status(404).json({ error: "Task not found!" });
+  // } else {
+  //   res
+  //     .status(200)
+  //     .json({ message: `The task [${todo.task}] deleted successfully.` });
+  // }
 });
 
 todosRouter.put("/:id", async (req, res) => {
