@@ -4,7 +4,10 @@ const Todo = require("../models/todo");
 const User = require("../models/user");
 
 todosRouter.post("/", async (req, res) => {
-  const { task, done, userId } = req.body;
+  const { task, done } = req.body;
+  const authHeader = req.get("authorization");
+  console.log(authHeader);
+  return res.status(200);
   const user = await User.findById(userId);
   if (!user) {
     return res.status(404).json({ error: "user not found" });
